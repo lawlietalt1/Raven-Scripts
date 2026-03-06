@@ -270,26 +270,30 @@ void onRenderTick(float partialTicks) {
 // Called whenever the sword needs to be unblocked.
 // Decides whether to activate lag mode or release cleanly.
 void startUnblock(long now) {
-    keybinds.setPressed("use", false);
     blocking = false;
     blockEnd = now + 50; // 1-tick cooldown before re-block
 
     double lagChance = modules.getSlider(scriptName, "Lag Chance");
-    if (lagChance <= 0) return;
+    boolean willLag = lagChance > 0 && util.randomDouble(0, 100) <= lagChance;
 
-    double roll = util.randomDouble(0, 100);
-    if (roll > lagChance) return;
+    if (willLag) {
+        // Capture the server's last known position before lag starts
+        Entity player = client.getPlayer();
+        if (player != null) {
+            lagStartPos = player.getPosition();
+        }
 
-    // Capture the server's last known position before lag starts
-    Entity player = client.getPlayer();
-    if (player != null) {
-        lagStartPos = player.getPosition();
+        // Activate lag BEFORE unblocking — so onPacketSent catches the C08-stop
+        long lagDuration = (long) modules.getSlider(scriptName, "Lag Max Duration");
+        lagActive = true;
+        lagEndTime = now + lagDuration;
+
+        // NOW unblock — the C08-stop will be queued, not sent
+        keybinds.setPressed("use", false);
+    } else {
+        // No lag — clean unblock, C08-stop goes through normally
+        keybinds.setPressed("use", false);
     }
-
-    // Activate lag — onPacketSent will now queue ALL outbound packets
-    long lagDuration = (long) modules.getSlider(scriptName, "Lag Max Duration");
-    lagActive = true;
-    lagEndTime = now + lagDuration;
 }
 
 // Draw a simple cyan ring at the server's last known player position (feet level)
