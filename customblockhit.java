@@ -22,11 +22,11 @@ ArrayList lagQueue = new ArrayList(); // each entry: Object[]{ Long releaseTime,
 boolean lagTimerRunning = false;
 
 void onLoad() {
-    modules.registerSlider("Maximum Hurt Time", " ms", 330, 50, 1000, 1);
-    modules.registerSlider("Maximum Hold Duration", " ms", 50, 50, 500, 1);
-    modules.registerSlider("Range", " blocks", 3.5, 1.0, 6.0, 0.1);
+    modules.registerSlider("Maximum Hurt Time", " ms", 360, 50, 500, 10);
+    modules.registerSlider("Maximum Hold Duration", " ms", 50, 50, 500, 10);
+    modules.registerSlider("Range", " blocks", 3.2, 1.0, 6.0, 0.1);
     modules.registerSlider("Lag Chance", "%", 100, 0, 100, 1);
-    modules.registerSlider("Lag Max Duration", " ms", 210, 50, 1000, 25);
+    modules.registerSlider("Lag Max Duration", " ms", 100, 50, 500, 10);
     modules.registerButton("Block Again Immediately", true);
     modules.registerButton("Prevent Delaying Attacks", true);
     modules.registerButton("Require Damage", true);
