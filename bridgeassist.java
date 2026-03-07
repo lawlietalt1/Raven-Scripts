@@ -1,7 +1,3 @@
-// Eagle.java - Bridge Assist (Slinky-style 1:1 Logic)
-// 4-corner AABB edge detection with velocity+input prediction
-// Timer-based unsneak with smooth noise randomization
-
 // === State ===
 double unsneakTimer = 0.0;
 boolean eagleActive = false;
